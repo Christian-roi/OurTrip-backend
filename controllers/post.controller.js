@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
             // console.log(mimeType)
             let dir = path.join(__dirname,"../assets/uploads/posts/"+filename+'.'+mimeType);
             fs.writeFileSync(dir, buff)
-            imageUrl = dir;            
+            imageUrl = "/uploads/posts/"+filename+'.'+mimeType;            
         }
 
         await Post.create({
@@ -56,7 +56,7 @@ exports.update = async (req, res) => {
             existsPost.place = place;
             existsPost.content = content;
             if (image) {            
-                let oldFile = existsPost.image.split('posts\\')[1];
+                let oldFile = existsPost.image.split('posts/')[1];
                 // console.log(oldFile);
                 let buff = new Buffer(image.split('base64,')[1], 'base64');
                 let filename = user_id.toString()+Date.now();
@@ -64,7 +64,7 @@ exports.update = async (req, res) => {
                 let mimeType = baseImage.profilepic.match(/[^:/]\w+(?=;|,)/)[0];
                 let dir = path.join(__dirname,"../assets/uploads/posts/"+filename+'.'+mimeType);
                 fs.writeFileSync(dir, buff);
-                existsPost.image = dir;  
+                existsPost.image = "/uploads/posts/"+filename+'.'+mimeType;  
                 fs.unlink(path.join(__dirname,"../assets/uploads/posts/")+oldFile, (err) => {
                     if (err) {
                       res.status(500).send({
@@ -105,7 +105,7 @@ exports.destroy = async (req, res) => {
 
         if (existsPost) {
             if (existsPost) {
-                let oldFile = existsPost.image.split('posts\\')[1];
+                let oldFile = existsPost.image.split('posts/')[1];
                 fs.unlink(path.join(__dirname,"../assets/uploads/posts/")+oldFile, (err) => {
                     if (err) {
                       res.status(500).send({
