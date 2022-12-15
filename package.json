@@ -1,0 +1,36 @@
+{
+  "name": "ourtrip-backend",
+  "version": "1.0.0",
+  "description": "mini project sparta coding",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Christian-roi/OurTrip-backend.git"
+  },
+  "keywords": [
+    "expressJs",
+    "javascript",
+    "mySQL",
+    "NodeJs"
+  ],
+  "author": "Team 7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Christian-roi/OurTrip-backend/issues"
+  },
+  "homepage": "https://github.com/Christian-roi/OurTrip-backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.20",
+    "sequelize": "^6.27.0"
+  }
+}
