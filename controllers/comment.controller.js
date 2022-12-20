@@ -46,7 +46,40 @@ exports.getComment = async (req, res) => {
        }
    };
 
-// //update komentar
+//update komentar
+exports.updateComment = async (req, res) => {
+       try {
+           const { commentId } = req.params;
+           const { postId, userId, content } = req.body;
+     
+           const existsComment = await Comment.findOne({
+               where: {
+                   commentId,              
+                   postId,
+                   userId,
+               },
+           });
+   
+           if (existsComment) {
+               existsComment.content = content;
+              
+               await existsComment.save();
+               return res.status(200).json({
+                   message: "Your comment has been updated!",
+               });
+           } else {
+               return res.status(404).json({
+                   message: "Your comment failed to updated!",
+               });
+           }
+       } catch (error) {
+           console.error(error);
+           return res.status(500).json({
+               message: error
+           })
+       }
+   };
+
 // exports.update = async (req, res) => {
 //        try {
 //               const {
