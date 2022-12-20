@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static("assets"));
 
-db.sequelize.sync({}).then(() => {
+db.sequelize.sync({alter:true}).then(() => {
     console.log("Sync database...");
     // initial();
 });

@@ -145,17 +145,41 @@ exports.getAll = async (req, res) => {
                         { place: { [Op.like]: `%${searchQuery}%` } },
                         { content: { [Op.like]: `%${searchQuery}%` } },
                     ]
-                }
+                },
+                include: ['user']
             });    
             return res.status(200).json({
-                data: searchData
+                data: searchData.map(p => ({
+                    id: p.id,
+                    title: p.title,
+                    place: p.place,
+                    image: p.image,
+                    user_id: p.user_id,
+                    user_name: p.user.name,
+                    user_profile: p.user.profile,
+                    createdAt: p.createdAt.toString(),
+                    updatedAt: p.updatedAt.toString(),
+                }))
             });
         }
         const posts = await Post.findAll({
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'DESC']],
+            include: ['user']
         });
+
         return res.status(200).json({
-            data: posts
+            data: posts.map(p => ({
+                id: p.id,
+                title: p.title,
+                place: p.place,
+                image: p.image,
+                content: p.content,
+                user_id: p.user_id,
+                user_name: p.user.name,
+                user_profile: p.user.profile,
+                createdAt: p.createdAt.toString(),
+                updatedAt: p.updatedAt.toString(),
+            }))
         });
     } catch (error) {
         console.error(error);
@@ -168,11 +192,24 @@ exports.getAll = async (req, res) => {
 exports.getById = async (req, res) => {
     try {
         const { id } = req.params; 
-        const data = await Post.findByPk(id);
+        const data = await Post.findByPk(id,{
+            include: ['user','comments']
+        });
 
         if (data) {
             return res.status(200).json({
-                data
+                data : {
+                    id: data.id,
+                    title: data.title,
+                    place: data.place,
+                    image: data.image,
+                    user_id: data.user_id,
+                    user_name: data.user.name,
+                    user_profile: data.user.profile,
+                    createdAt: data.createdAt.toString(),
+                    updatedAt: data.updatedAt.toString(),
+                    comments: data.comments
+                }
             });
         } else {
             return res.status(404).json({

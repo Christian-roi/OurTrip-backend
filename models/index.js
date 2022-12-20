@@ -18,10 +18,24 @@ db.sequelize = sequelize;
 
 db.users = require('./Users')(sequelize, Sequalize);
 db.posts = require('./Posts')(sequelize, Sequalize);
+db.comments = require('./Comments')(sequelize, Sequalize);
 
 db.posts.belongsTo(db.users, {
     foreignKey: 'user_id',
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    as: 'user'
+});
+
+db.comments.belongsTo(db.users, {
+    foreignKey: 'userId',
+    onDelete: 'cascade',
+    as: 'user'
+});
+
+db.posts.hasMany(db.comments, {
+    foreignKey: 'postId',
+    onDelete: 'cascade',
+    as: 'comments'
 });
 
 module.exports = db;

@@ -1,4 +1,5 @@
 const { create, update, destroy, getAll, getById } = require('../controllers/post.controller');
+const { buat, getComment, updateComment  } = require('../controllers/comment.controller');
 const { signup, login } = require('../controllers/users.controller');
 
 module.exports = app => {
@@ -9,4 +10,14 @@ module.exports = app => {
     app.get('/api/posts/:id', getById);
     app.post('/api/signup', signup);
     app.post('/api/login', login);
+    app.post('/comment/:postId', buat);
+    app.get('/comment', getComment);
+    app.put('/comment/:commentId', updateComment);
 }
+
+
+
+
+
+
+
