@@ -7,7 +7,7 @@ module.exports = app => {
     app.delete('/api/posts/:id', destroy);
     app.get('/api/posts', getAll);
     app.get('/api/posts/:id', getById);
-    app.post('/comment', buat);
+    app.post('/comment/:postId', buat);
     app.get('/comment', getComment);
     app.put('/comment/:commentId', updateComment);
 }

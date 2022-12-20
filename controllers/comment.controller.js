@@ -5,7 +5,10 @@ const Comment = db.comments;
 exports.buat = async (req, res) => {
        try {
               const {
-                     postId,
+                postId
+              } = req.params;
+              
+              const {
                      userId,
                      content
               } = req.body;
