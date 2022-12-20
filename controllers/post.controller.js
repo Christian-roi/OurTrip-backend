@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { Op } = require('sequelize');
 const db = require('../models');
 const Post = db.posts;
 
@@ -134,13 +135,28 @@ exports.destroy = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
+        const searchQuery = req.query.search;
+        if (searchQuery) {
+            const searchData = await Post.findAll({
+                order: [['createdAt', 'DESC']],
+                where: {
+                    [Op.or]: [
+                        { title: { [Op.like]: `%${searchQuery}%` } },
+                        { place: { [Op.like]: `%${searchQuery}%` } },
+                        { content: { [Op.like]: `%${searchQuery}%` } },
+                    ]
+                }
+            });    
+            return res.status(200).json({
+                data: searchData
+            });
+        }
         const posts = await Post.findAll({
             order: [['createdAt', 'DESC']]
         });
-
         return res.status(200).json({
             data: posts
-        })
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
