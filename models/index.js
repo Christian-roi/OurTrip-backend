@@ -18,6 +18,7 @@ db.sequelize = sequelize;
 
 db.users = require('./Users')(sequelize, Sequalize);
 db.posts = require('./Posts')(sequelize, Sequalize);
+db.comments = require('./Comments')(sequelize, Sequalize);
 
 db.posts.belongsTo(db.users, {
     foreignKey: 'user_id',
