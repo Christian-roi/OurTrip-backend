@@ -50,13 +50,11 @@ exports.getComment = async (req, res) => {
 exports.updateComment = async (req, res) => {
        try {
            const { commentId } = req.params;
-           const { postId, userId, content } = req.body;
+           const { content } = req.body;
      
            const existsComment = await Comment.findOne({
                where: {
                    commentId,              
-                   postId,
-                   userId,
                },
            });
    
