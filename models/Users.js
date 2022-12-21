@@ -7,10 +7,10 @@ module.exports = (sequelize, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            name: {
+            first_name: {
                 type: Sequelize.STRING,
             },
-            profile: {
+            last_name: {
                 type: Sequelize.STRING,
             },
             email: {
