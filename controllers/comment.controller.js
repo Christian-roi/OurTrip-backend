@@ -7,7 +7,7 @@ exports.buat = async (req, res) => {
               const {
                 postId
               } = req.params;
-              
+
               const {
                      userId,
                      content
@@ -80,6 +80,30 @@ exports.updateComment = async (req, res) => {
            })
        }
    };
+
+//    Get Comment By PostId
+exports.getCommentByPost = async (req, res) => {
+    try {
+        const {
+          postId
+        } = req.params;
+        const comments = await Comment.findAll({
+            order: [['createdAt', 'DESC']],
+            where: {
+                postId
+            }
+        });
+
+        return res.status(200).json({
+            data: comments
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: error
+        });
+    }
+};
 
 // exports.update = async (req, res) => {
 //        try {

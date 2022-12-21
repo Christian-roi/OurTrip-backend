@@ -223,3 +223,64 @@ exports.getById = async (req, res) => {
         });
     }
 };
+
+exports.getUserPosts = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const searchQuery = req.query.search;
+        if (searchQuery) {
+            const searchData = await Post.findAll({
+                order: [['createdAt', 'DESC']],
+                where: {
+                    user_id : user_id,
+                    [Op.or]: [
+                        { title: { [Op.like]: `%${searchQuery}%` } },
+                        { place: { [Op.like]: `%${searchQuery}%` } },
+                        { content: { [Op.like]: `%${searchQuery}%` } },
+                    ]
+                },
+                include: ['user']
+            });    
+            return res.status(200).json({
+                data: searchData.map(p => ({
+                    id: p.id,
+                    title: p.title,
+                    place: p.place,
+                    image: p.image,
+                    user_id: p.user_id,
+                    user_name: p.user.name,
+                    user_profile: p.user.profile,
+                    createdAt: p.createdAt.toString(),
+                    updatedAt: p.updatedAt.toString(),
+                }))
+            });
+        }
+        const posts = await Post.findAll({
+            order: [['createdAt', 'DESC']],
+            where: {
+                user_id
+            },
+            include: ['user']
+        });
+
+        return res.status(200).json({
+            data: posts.map(p => ({
+                id: p.id,
+                title: p.title,
+                place: p.place,
+                image: p.image,
+                content: p.content,
+                user_id: p.user_id,
+                user_name: p.user.name,
+                user_profile: p.user.profile,
+                createdAt: p.createdAt.toString(),
+                updatedAt: p.updatedAt.toString(),
+            }))
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: error
+        });
+    }
+};
