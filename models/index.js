@@ -2,13 +2,14 @@ const config = require('../db/config');
 
 const Sequalize = require('sequelize');
 const sequelize = new Sequalize(
-    config.DB,
-    config.USER,
-    config.PASSWORD,
+    // config.DB,
+    // config.USER,
+    // config.PASSWORD,
     {
-        host: config.HOST,
         dialect: config.dialect,
+        storage: config.storage
     },
+    
 );
 
 const db = {};

@@ -4,6 +4,21 @@ const { Op } = require('sequelize');
 const db = require('../models');
 const Post = db.posts;
 
+// const getPagination = (page, size) => {
+//     const limit = size ? +size : 3;
+//     const offset = page ? page * limit : 0;
+  
+//     return { limit, offset };
+// };
+
+// const getPagingData = (data, page, limit) => {
+//     const { count: totalItems, rows: tutorials } = data;
+//     const currentPage = page ? +page : 0;
+//     const totalPages = Math.ceil(totalItems / limit);
+  
+//     return { totalItems, tutorials, totalPages, currentPage };
+// };
+
 exports.create = async (req, res) => {
     try {
         const { user_id, title, place, image, content } = req.body;
@@ -135,7 +150,11 @@ exports.destroy = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
+        const { page,size } = req.query;
         const searchQuery = req.query.search;
+        const limit = size ? +size : 5;
+        const offset = page ? page * limit : 0;
+        // const { limit, offset } = getPagination(page, size)
         if (searchQuery) {
             const searchData = await Post.findAll({
                 order: [['createdAt', 'DESC']],
@@ -146,6 +165,8 @@ exports.getAll = async (req, res) => {
                         { content: { [Op.like]: `%${searchQuery}%` } },
                     ]
                 },
+                limit: limit,
+                offset: offset,
                 include: ['user']
             });    
             return res.status(200).json({
@@ -155,8 +176,8 @@ exports.getAll = async (req, res) => {
                     place: p.place,
                     image: p.image,
                     user_id: p.user_id,
-                    user_name: p.user.name,
-                    user_profile: p.user.profile,
+                    user_first_name: p.user.first_name,
+                    user_last_name: p.user.user_last_name,
                     createdAt: p.createdAt.toString(),
                     updatedAt: p.updatedAt.toString(),
                 }))
@@ -164,7 +185,9 @@ exports.getAll = async (req, res) => {
         }
         const posts = await Post.findAll({
             order: [['createdAt', 'DESC']],
-            include: ['user']
+            include: ['user'],
+            limit: limit,
+            offset: offset,
         });
 
         return res.status(200).json({
@@ -175,8 +198,8 @@ exports.getAll = async (req, res) => {
                 image: p.image,
                 content: p.content,
                 user_id: p.user_id,
-                user_name: p.user.name,
-                user_profile: p.user.profile,
+                user_first_name: p.user.first_name,
+                user_last_name: p.user.last_name,
                 createdAt: p.createdAt.toString(),
                 updatedAt: p.updatedAt.toString(),
             }))
@@ -193,7 +216,7 @@ exports.getById = async (req, res) => {
     try {
         const { id } = req.params; 
         const data = await Post.findByPk(id,{
-            include: ['user','comments']
+            include: ['user', 'comments'],
         });
 
         if (data) {
@@ -203,9 +226,10 @@ exports.getById = async (req, res) => {
                     title: data.title,
                     place: data.place,
                     image: data.image,
+                    content: data.content,
                     user_id: data.user_id,
-                    user_name: data.user.name,
-                    user_profile: data.user.profile,
+                    user_first_name: data.user.first_name,
+                    user_last_name: data.user.last_name,
                     createdAt: data.createdAt.toString(),
                     updatedAt: data.updatedAt.toString(),
                     comments: data.comments
@@ -248,8 +272,8 @@ exports.getUserPosts = async (req, res) => {
                     place: p.place,
                     image: p.image,
                     user_id: p.user_id,
-                    user_name: p.user.name,
-                    user_profile: p.user.profile,
+                    user_first_name: p.user.first_name,
+                    user_last_name: p.user.last_name,
                     createdAt: p.createdAt.toString(),
                     updatedAt: p.updatedAt.toString(),
                 }))
@@ -271,8 +295,8 @@ exports.getUserPosts = async (req, res) => {
                 image: p.image,
                 content: p.content,
                 user_id: p.user_id,
-                user_name: p.user.name,
-                user_profile: p.user.profile,
+                user_first_name: p.user.first_name,
+                user_last_name: p.user.last_name,
                 createdAt: p.createdAt.toString(),
                 updatedAt: p.updatedAt.toString(),
             }))

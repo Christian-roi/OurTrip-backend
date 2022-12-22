@@ -1,4 +1,4 @@
-/assets/uploads/posts/*png
-/assets/uploads/posts/*jpg
-/assets/uploads/users/*png
-/assets/uploads/users/*jpg
+# /assets/uploads/posts/*png
+# /assets/uploads/posts/*jpeg
+# /assets/uploads/users/*png
+# /assets/uploads/users/*jpeg
